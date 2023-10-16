@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import ButtonComponent from './components/buttonComponent';
+import TestComponent from './components/testComponent';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+      <ButtonComponent />
+    <TestComponent />
   </React.StrictMode>
 );
 
