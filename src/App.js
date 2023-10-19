@@ -6,7 +6,8 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dude: 'Marceline the Vampire',
+            newWho: 'Marceline the Vampire',
+            newWat: 'A wild rocker girl, yeah.',
             characters:  [
                 {
                     id: 1,
@@ -30,15 +31,34 @@ class App extends Component {
         };
     }
 
-    handleChange = event => {
+    /**
+     * @param event {Event}
+     * SAVE NEW WHO
+     */
+    handleWho = event => {
         this.setState({
-            dude: event.target.value,
+            newWho: event.target.value,
         });
     }
 
+    /**
+     * @param event {Event}
+     * SAVE NEW WAT
+     */
+    handleWat = event => {
+        this.setState({
+            newWat: event.target.value,
+        });
+    }
+
+    /**
+     * @param event {Event}
+     * Add new item
+     */
     handleSubmit = event => {
-        console.log(event);
-        event.preventDefault();
+        if (event.key !== 'Enter') {
+            return;
+        }
 
         // zapis do state je async a neni dobry mutaci Objektu, pole použit tento způsob. Tento způsobje pro primitivni typy
         /* this.setState({
@@ -48,9 +68,9 @@ class App extends Component {
         this.setState(state => {
             const newDude = {
                 id: Math.max(...state.characters.map(item => item.id)) + 1,
-                who: state.dude,
-                wat: state.dude,
-                col: 19
+                who: state.newWho,
+                wat: state.newWat,
+                cool: 19
             }
             return {
                 characters: [...this.state.characters, newDude],
@@ -64,17 +84,25 @@ class App extends Component {
     listOfDudes = () => {
         return this.state.characters.map(dude => (
             <li
-                className={dude.who.split(' ').length < 3 ? 'strong' : ''}
+                className='dude'
                 key={dude.id}
             >
-                {dude.who}
-                {dude.who.split(' ').length < 3 && (
-                    <small>
-                        <strong>
-                            - lol, short name
-                        </strong>
-                    </small>
-                )}
+                <a href="#remove" className="ctrl">x</a>
+                <article
+                    className={
+                        dude.cool < 10 ? 'faded' : dude.cool > 50 ? 'gold' : ''
+                    }
+                >
+                    {dude.who}<br />
+                    <span>
+                        {dude.wat}
+                    </span>
+                </article>
+                <input
+                    className="ctrl"
+                    type="number"
+                    value={dude.cool}
+                />
             </li>
         ));
     }
@@ -87,16 +115,24 @@ class App extends Component {
                 </ul>
                 <form
                     className="add-new"
-                    onSubmit={this.handleSubmit}
+                    onKeyPress={this.handleSubmit}
                 >
                     <input
                         type="text"
-                        onChange={this.handleChange}
-                        value={this.state.dude}
+                        onChange={this.handleWho}
+                        value={this.state.newWho}
+                    />
+                    <input
+                        type="text"
+                        onChange={this.handleWat}
+                        value={this.state.newWat}
                     />
                 </form>
                 <p className="preview">
-                    {this.state.dude}
+                    {this.state.newWho}<br />
+                    <small>
+                        {this.state.newWat}
+                    </small>
                 </p>
             </div>
         )
