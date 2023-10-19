@@ -40,17 +40,22 @@ class App extends Component {
         console.log(event);
         event.preventDefault();
 
-        const newDude = {
-            id: Math.max(...this.state.characters.map(item => item.id)) + 1,
-            who: this.state.dude,
-            wat: this.state.dude,
-            col: 19
-        }
-
         // zapis do state je async a neni dobry mutaci Objektu, pole použit tento způsob. Tento způsobje pro primitivni typy
-        this.setState({
+        /* this.setState({
             characters: [...this.state.characters, newDude],
-        });
+        }); */
+
+        this.setState(state => {
+            const newDude = {
+                id: Math.max(...state.characters.map(item => item.id)) + 1,
+                who: state.dude,
+                wat: state.dude,
+                col: 19
+            }
+            return {
+                characters: [...this.state.characters, newDude],
+            }
+        })
     }
 
     /**
