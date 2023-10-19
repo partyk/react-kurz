@@ -37,22 +37,19 @@ class App extends Component {
     }
 
     handleSubmit = event => {
+        console.log(event);
         event.preventDefault();
 
         const newDude = {
-            id: 99,
+            id: Math.max(...this.state.characters.map(item => item.id)) + 1,
             who: this.state.dude,
             wat: this.state.dude,
             col: 19
         }
 
         // zapis do state je async a neni dobry mutaci Objektu, pole použit tento způsob. Tento způsobje pro primitivni typy
-        /* this.setState({
-            this.state.characters = [...state.characters, newDude];
-        }); */
-
-        this.setState(state => {
-            state.characters = [...state.characters, newDude];
+        this.setState({
+            characters: [...this.state.characters, newDude],
         });
     }
 
