@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {Component, Fragment} from "react";
 import './app.css';
 
 class App extends Component {
@@ -6,7 +6,8 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            who: 'Marceline the Vampire',
+            who: 'Jméno',
+            wat: 'Popis',
             characters:  [
                 {
                     id: 1,
@@ -18,26 +19,29 @@ class App extends Component {
                     id: 3,
                     who: 'Name 3',
                     wat: 'Lorem ipsum dolor sit amet, consectetuer.',
-                    cool: 42
+                    cool: 52
                 },
                 {
                     id: 2,
                     who: 'Name 2',
                     wat: 'Lorem ipsum dolor',
-                    cool: 15
+                    cool: 9
                 }
             ],
         };
     }
 
     handleSubmit = event => {
-        event.preventDefault();
+        // event.preventDefault();
+        if (event.key !== 'Enter') {
+            return;
+        }
         // mutovat charcters
         this.setState(state => {
             const newItems = {
                 id: Math.max(...state.characters.map(p => p.id)) + 1,
                 who: state.who,
-                wat: 'asdasdas',
+                wat: state.wat,
                 cool:  15
             }
             return {
@@ -56,47 +60,75 @@ class App extends Component {
         })
     }
 
+    handleWat = event => {
+        // console.log(event.target.value);
+        this.setState({
+            wat: event.target.value
+        })
+    }
+
 
     characters =  () => {
         return this.state.characters.map(item => (
             <li
+                className='dude'
                 key={item.id}
             >
-                {item.who}
-                {item.who.split(' ').length > 3 && (
-                    <small>
-                        <strong>
-                            - lol, short name
-                        </strong>
-                    </small>
-                )}
+                <a href="#remove" className="ctrl">x</a>
+                <article
+                    className={
+                        item.cool < 10 ? 'faded' : (item.cool > 50 ? 'gold' : '')
+                    }
+                >
+                    {item.who}<br />
+                    <span>
+                        {item.wat}
+                    </span>
+                </article>
+                <input
+                    className="ctrl"
+                    type="number"
+                    value={item.cool}
+                />
             </li>
         ))
     }
 
     render() {
         return (
-            <div>
-                <ul>
-                    {this.characters()}
-                </ul>
-                <form
-                    action=""
-                    className="add-new"
-                    onSubmit={this.handleSubmit}
-                >
-                    <input
-                        type="text"
-                        onChange={this.handleWho}
-                        value={this.state.who}
-                    />
-                </form>
-                <p>
-                    {this.state.who} lives!<br />
-                </p>
-            </div>
+            <Fragment>
+                <h2>List names</h2>
+                <div>
+                    <ul>
+                        {this.characters()}
+                    </ul>
+                    <form
+                        action=""
+                        className="add-new"
+                        onKeyPress={this.handleSubmit}
+                    >
+                        <input
+                            type="text"
+                            onChange={this.handleWho}
+                            value={this.state.who}
+                        />
+                        <input
+                            type="text"
+                            onChange={this.handleWat}
+                            value={this.state.wat}
+                        />
+                    </form>
+                    <p className="preview">
+                        {this.state.who}<br />
+                        <small>
+                            {this.state.wat}
+                        </small>
+                    </p>
+                </div>
+            </Fragment>
         )
     };
 };
 
 export default App;
+
