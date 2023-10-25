@@ -1,10 +1,11 @@
-import {Component} from "react";
+import {Component, createRef} from "react";
 import './app.css';
 
 class App extends Component {
 
     constructor(props) {
         super(props);
+        this.input = createRef();
         this.state = {
             newWho: 'Marceline the Vampire',
             newWat: 'A wild rocker girl, yeah.',
@@ -29,6 +30,21 @@ class App extends Component {
                 }
             ],
         };
+    }
+
+    // lifeCycleMethods
+    componentDidMount() {
+        /* fetch('https://api.myjson.com/bins/zg7ze')
+            .then(res => res.json())
+            .then(json => this.setState({ characters: json })) */
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log(prevProps, prevState, snapshot);
+    }
+
+    componentWillUnmount() {
+        console.log('Unmount');
     }
 
     /**
@@ -110,6 +126,16 @@ class App extends Component {
                 characters: [...this.state.characters, newDude],
             }
         })
+
+        this.resetForm();
+        this.input.current.focus();
+    }
+
+    resetForm = () => {
+        this.setState({
+            newWho: '',
+            newWat: ''
+        })
     }
 
     /**
@@ -159,6 +185,8 @@ class App extends Component {
                     onKeyPress={this.handleSubmit}
                 >
                     <input
+                        ref={this.input}
+                        autoFocus
                         type="text"
                         onChange={this.handleWho}
                         value={this.state.newWho}
