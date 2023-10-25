@@ -32,6 +32,35 @@ class App extends Component {
     }
 
     /**
+     * @param dude {}
+     * @returns {(function(*): void)|*}
+     */
+    handleCool = dude => event => {
+        const cool = Number(event.target.value);
+        this.setState(state => {
+            return {
+                characters: state.characters.map(item => {
+                    return item === dude ? {...dude, cool} : item;
+                })
+            }
+        });
+    }
+
+    /**
+     * @param event {Event}
+     * @param dude {{}}
+     */
+    handleRemove = (event, dude) => {
+        event.preventDefault();
+        this.setState(state => {
+            return {
+                characters: state.characters.filter(item => item !== dude)
+            };
+        })
+        console.log(event, dude);
+    }
+
+    /**
      * @param event {Event}
      * SAVE NEW WHO
      */
@@ -57,6 +86,11 @@ class App extends Component {
      */
     handleSubmit = event => {
         if (event.key !== 'Enter') {
+            return;
+        }
+
+        if (!(this.state.newWho && this.state.newWat)) {
+            alert('Nemáš vyplněný formulář');
             return;
         }
 
@@ -87,7 +121,13 @@ class App extends Component {
                 className='dude'
                 key={dude.id}
             >
-                <a href="#remove" className="ctrl">x</a>
+                <a
+                    href="#remove"
+                    className="ctrl"
+                    onClick={event => {
+                        this.handleRemove(event, dude);
+                    }}
+                >x</a>
                 <article
                     className={
                         dude.cool < 10 ? 'faded' : dude.cool > 50 ? 'gold' : ''
@@ -102,6 +142,7 @@ class App extends Component {
                     className="ctrl"
                     type="number"
                     value={dude.cool}
+                    onChange={this.handleCool(dude)}
                 />
             </li>
         ));
