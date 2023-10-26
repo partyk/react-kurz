@@ -1,4 +1,7 @@
 import {Component, createRef} from "react";
+// @DOC https://reactcommunity.org/react-transition-group/
+import {CSSTransition, TransitionGroup} from "react-transition-group";
+
 import './app.css';
 
 class App extends Component {
@@ -143,43 +146,49 @@ class App extends Component {
      */
     listOfDudes = () => {
         return this.state.characters.map(dude => (
-            <li
-                className='dude'
+            <CSSTransition
                 key={dude.id}
+                timeout={200}
+                classNames='dude'
             >
-                <a
-                    href="#remove"
-                    className="ctrl"
-                    onClick={event => {
-                        this.handleRemove(event, dude);
-                    }}
-                >x</a>
-                <article
-                    className={
-                        dude.cool < 10 ? 'faded' : dude.cool > 50 ? 'gold' : ''
-                    }
+                <li
+                    className='dude'
+                    key={dude.id}
                 >
-                    {dude.who}<br />
-                    <span>
+                    <a
+                        href="#remove"
+                        className="ctrl"
+                        onClick={event => {
+                            this.handleRemove(event, dude);
+                        }}
+                    >x</a>
+                    <article
+                        className={
+                            dude.cool < 10 ? 'faded' : dude.cool > 50 ? 'gold' : ''
+                        }
+                    >
+                        {dude.who}<br />
+                        <span>
                         {dude.wat}
                     </span>
-                </article>
-                <input
-                    className="ctrl"
-                    type="number"
-                    value={dude.cool}
-                    onChange={this.handleCool(dude)}
-                />
-            </li>
+                    </article>
+                    <input
+                        className="ctrl"
+                        type="number"
+                        value={dude.cool}
+                        onChange={this.handleCool(dude)}
+                    />
+                </li>
+            </CSSTransition>
         ));
     }
 
     render() {
         return (
             <div>
-                <ul>
+                <TransitionGroup component="ul">
                     {this.listOfDudes()}
-                </ul>
+                </TransitionGroup>
                 <form
                     className="add-new"
                     onKeyPress={this.handleSubmit}
