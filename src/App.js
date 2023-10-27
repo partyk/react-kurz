@@ -1,4 +1,5 @@
 import {Component, Fragment, createRef} from "react";
+import {CSSTransition, TransitionGroup} from "react-transition-group";
 import './app.css';
 
 class App extends Component {
@@ -139,36 +140,42 @@ class App extends Component {
 
     characters =  () => {
         return this.state.characters.map(item => (
-            <li
+            <CSSTransition
                 className='dude'
+                timeout={200}
                 key={item.id}
             >
-                <a
-                    href="#remove"
-                    className="ctrl"
-                    onClick={event => {
-                        this.handleRemove(event, item);
-                    }}
+                <li
+                    className='dude'
+                    key={item.id}
                 >
-                    x
-                </a>
-                <article
-                    className={
-                        item.cool < 10 ? 'faded' : (item.cool > 50 ? 'gold' : '')
-                    }
-                >
-                    {item.who}<br />
-                    <span>
+                    <a
+                        href="#remove"
+                        className="ctrl"
+                        onClick={event => {
+                            this.handleRemove(event, item);
+                        }}
+                    >
+                        x
+                    </a>
+                    <article
+                        className={
+                            item.cool < 10 ? 'faded' : (item.cool > 50 ? 'gold' : '')
+                        }
+                    >
+                        {item.who}<br />
+                        <span>
                         {item.wat}
                     </span>
-                </article>
-                <input
-                    className="ctrl"
-                    type="number"
-                    value={item.cool}
-                    onChange={this.handleCool(item)}
-                />
-            </li>
+                    </article>
+                    <input
+                        className="ctrl"
+                        type="number"
+                        value={item.cool}
+                        onChange={this.handleCool(item)}
+                    />
+                </li>
+            </CSSTransition>
         ))
     }
 
@@ -177,9 +184,11 @@ class App extends Component {
             <Fragment>
                 <h2>List names</h2>
                 <div>
-                    <ul>
+                    <TransitionGroup
+                        component="ul"
+                    >
                         {this.characters()}
-                    </ul>
+                    </TransitionGroup>
                     <form
                         action=""
                         className="add-new"
