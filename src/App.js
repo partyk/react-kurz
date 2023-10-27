@@ -1,10 +1,11 @@
-import {Component, Fragment} from "react";
+import {Component, Fragment, createRef} from "react";
 import './app.css';
 
 class App extends Component {
 
     constructor(props) {
         super(props);
+        this.input = createRef();
         this.state = {
             who: 'Jméno',
             wat: 'Popis',
@@ -29,6 +30,23 @@ class App extends Component {
                 }
             ],
         };
+    }
+
+    // lifeCycleMethods
+    /**
+     * @DOC https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+     */
+    componentDidMount() {
+        /* fetch('https://api.myjson.com/bins/zg7ze')
+            .then(res => res.json())
+            .then(json => this.setState({ characters: json })) */
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+    }
+
+    componentWillUnmount() {
+        console.log('Unmount');
     }
 
     handleCool = itemUpdate => event => {
@@ -71,6 +89,12 @@ class App extends Component {
         if (event.key !== 'Enter') {
             return;
         }
+
+        if (!(this.state.who && this.state.wat)) {
+            alert('Nemáš vyplněný formulář');
+            return;
+        }
+
         // mutovat charcters
         this.setState(state => {
             const newItems = {
@@ -83,6 +107,9 @@ class App extends Component {
                 characters: [...state.characters, newItems],
             }
         })
+        console.log(this.input);
+        this.resetForm();
+        this.input.current.focus();
 
 
         // this.state.characters.push();
@@ -100,6 +127,13 @@ class App extends Component {
         this.setState({
             wat: event.target.value
         })
+    }
+
+    resetForm = () => {
+        this.setState({
+            who: '',
+            wat: ''
+        });
     }
 
 
@@ -152,7 +186,9 @@ class App extends Component {
                         onKeyPress={this.handleSubmit}
                     >
                         <input
+                            ref={this.input}
                             type="text"
+                            autoFocus
                             onChange={this.handleWho}
                             value={this.state.who}
                         />
