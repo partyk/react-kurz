@@ -31,6 +31,41 @@ class App extends Component {
         };
     }
 
+    handleCool = itemUpdate => event => {
+        const cool = +event.target.value;
+        this.setState(state => {
+            return {
+                characters: state.characters.map(item => {
+                    // po staru abz to bylo čitelné
+                    /* if (item === itemUpdate) {
+                        return {
+                            id: item.id,
+                            who: item.who,
+                            wat: item.wat,
+                            cool: cool
+                        };
+                    } else {
+                        return item;
+                    } */
+                    // ES6
+                    return item === itemUpdate ? {...item, cool} : item;
+                })
+            };
+        });
+    }
+
+    /**
+     * @param event {Event}
+     * @param itemUpdate {{}}
+     */
+    handleRemove = (event, itemUpdate) => {
+        this.setState(state => {
+            return {
+                characters: state.characters.filter(item => item !== itemUpdate)
+            };
+        });
+    };
+
     handleSubmit = event => {
         // event.preventDefault();
         if (event.key !== 'Enter') {
@@ -74,7 +109,15 @@ class App extends Component {
                 className='dude'
                 key={item.id}
             >
-                <a href="#remove" className="ctrl">x</a>
+                <a
+                    href="#remove"
+                    className="ctrl"
+                    onClick={event => {
+                        this.handleRemove(event, item);
+                    }}
+                >
+                    x
+                </a>
                 <article
                     className={
                         item.cool < 10 ? 'faded' : (item.cool > 50 ? 'gold' : '')
@@ -89,6 +132,7 @@ class App extends Component {
                     className="ctrl"
                     type="number"
                     value={item.cool}
+                    onChange={this.handleCool(item)}
                 />
             </li>
         ))
